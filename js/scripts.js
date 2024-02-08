@@ -7,7 +7,7 @@ const getJSON = async () => {
     return data;
 };
 
-// We can makle the anonymous callback function async
+// We can make the anonymous callback function async
 // then we can use await to get our array
 document.addEventListener('DOMContentLoaded', async () => {
     const myArray = await getJSON();
