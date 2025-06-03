@@ -1,26 +1,39 @@
 // This is calling a local file,
 // but the syntax is pretty much the same as a remote URL
 const getJSON = async () => {
-    const data = await fetch('./data/flight_logs.json').then((response) =>
-        response.json()
-    );
-    return data;
+  const data = await fetch("./data/flight_logs.json").then((response) =>
+    response.json()
+  );
+  return data;
 };
 
 // We can make the anonymous callback function async
 // then we can use await to get our array
-document.addEventListener('DOMContentLoaded', async () => {
-    const myArray = await getJSON();
-    console.log(myArray);
+document.addEventListener("DOMContentLoaded", async () => {
+  const myArray = await getJSON();
 
-    // Sort and return the data based on the airline
-    // hint: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#sorting_array_of_objects
+  // [..myArray] makes a shallow copy so the original array is unchanged since .sort changes the original myArray
+  let airlineData = [...myArray].sort((a, b) =>
+    a.airline.localeCompare(b.airline)
+  );
+  console.log(airlineData);
 
-    // Sort and return the data based on the arrival airport
+  let arrivalAirport = [...myArray].sort((a, b) =>
+    a.arrival_airport.localeCompare(b.arrival_airport)
+  );
+  console.log(arrivalAirport);
 
-    // Filter out everything but the flights made by Delta, return the new data
-    // hint: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter#filtering_invalid_entries_from_json
+  let delta = myArray.filter((flight) => flight.airline == "Delta");
+  console.log(delta);
 
-    // Do the same as before, but try doing it with reduce() instead of filter
-    // hint: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce#sum_of_values_in_an_object_array
+  let reduceDelta = myArray.reduce((accumulator, flight) => {
+    if (flight.airline === "Delta") {
+      return [...accumulator, flight];
+    } else {
+      return accumulator;
+    }
+    // starts with an empty array (initial accumulator value)
+  }, []);
+
+  console.log(reduceDelta);
 });
